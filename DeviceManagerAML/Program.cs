@@ -12,7 +12,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions);
-    options.ProviderOptions.ResponseType = "code";
+    //options.ProviderOptions.ResponseType = "code";
 });
 
 await builder.Build().RunAsync();
