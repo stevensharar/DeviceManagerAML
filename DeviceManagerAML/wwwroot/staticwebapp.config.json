@@ -1,0 +1,19 @@
+{
+  "navigationFallback": {
+    "rewrite": "index.html",
+    "exclude": [ "/_framework/*", "/css/*" ]
+  },
+
+  "routes": [
+    {
+      "route": "/authentication/login-callback*",
+      "redirect": "/authentication/login-callback",
+      "statusCode": 301
+    },
+    {
+      "route": "/authentication/logout-callback*",
+      "redirect": "/authentication/logout-callback",
+      "statusCode": 301
+    }
+  ]
+}
