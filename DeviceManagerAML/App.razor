@@ -1,4 +1,7 @@
-﻿<CascadingAuthenticationState>
+﻿@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager navigation
+
+<CascadingAuthenticationState>
      
  <Router AppAssembly="@typeof(Program).Assembly">
      <Found Context="routeData">
@@ -16,3 +19,18 @@
      </NotFound>
  </Router>
  </CascadingAuthenticationState>
+
+ @code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.Identity.IsAuthenticated)
+        {
+            navigation.NavigateTo("/authentication/login");
+        }
+    }
+
+ }   
