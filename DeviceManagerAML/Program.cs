@@ -13,8 +13,6 @@ builder.Services.AddOidcAuthentication(options =>
 {
     builder.Configuration.Bind("AzureAd", options.ProviderOptions);
     options.ProviderOptions.ResponseType = "code";
-    options.ProviderOptions.RedirectUri = "https://nice-hill-013471910.1.azurestaticapps.net/authentication/login-callback";
-    options.ProviderOptions.PostLogoutRedirectUri = "https://nice-hill-013471910.1.azurestaticapps.net/authentication/logout-callback";
 });
 
 await builder.Build().RunAsync();
