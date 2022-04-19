@@ -1,6 +1,5 @@
 ﻿@page "/"
-@inject NavigationManager NavigationManager 
-@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager  
 
 
 <AuthorizeView>
@@ -14,18 +13,3 @@
          <p>Not Authorized</p>
      </NotAuthorized>
  </AuthorizeView>
-
- @code {
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (!user.Identity.IsAuthenticated)
-        {
-            NavigationManager.NavigateTo("https://amldevicemanager.b2clogin.com/amldevicemanager.onmicrosoft.com/b2c_1_amldevicemanagersignin/oauth2/v2.0/authorize?client_id=ef040f10-f5ec-47a4-b2f6-f686fe8f842a&redirect_uri=https%3A%2F%2Fnice-hill-013471910.1.azurestaticapps.net&response_type=code&scope=openid%20profile&state=61e883ba7211488798787a46020b2225&code_challenge=kyl65y_C1WUuQNKMSVp5M6CJzvwxjnSBnJ8joragdaY&code_challenge_method=S256&response_mode=query");
-        }
-    }
-
- }   

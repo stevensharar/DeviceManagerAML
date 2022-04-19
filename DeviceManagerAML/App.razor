@@ -1,7 +1,4 @@
-﻿@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager navigation
-
-<CascadingAuthenticationState>
+﻿<CascadingAuthenticationState>
      
  <Router AppAssembly="@typeof(Program).Assembly">
      <Found Context="routeData">
@@ -19,4 +16,3 @@
      </NotFound>
  </Router>
  </CascadingAuthenticationState>
-
