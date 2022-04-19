@@ -1,0 +1,44 @@
+﻿@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <div>@ErrorMessage</div>
+}
+else if (Devices != null && Devices.Count() > 0)
+{
+    <ul class="list">
+        @foreach (var device in Devices)
+        {
+            <li role="presentation">
+                <div class="card">
+                    <CardContent Name="@device.DeviceId"
+                                 Model="@device.Model" />
+
+                    <footer class="card-footer">
+
+                        <ButtonFooter Class="delete-item"
+                                      IconClasses="fas fa-trash"
+                                      OnClick="@(async _ => await DeleteDevice.InvokeAsync(device))"
+                                      Label="Delete" />
+
+                        <ButtonFooter Class="edit-item"
+                                      IconClasses="fas fa-edit"
+                                      OnClick="@(async _ => await SelectDevice.InvokeAsync(device))"
+                                      Label="Edit" />
+
+                    </footer>
+
+                </div>
+
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <div>No devices found!</div>
+}
+@code {
+    [Parameter] public IEnumerable<Device> Devices { get; set; }
+    [Parameter] public EventCallback<Device> DeleteDevice { get; set; }
+    [Parameter] public EventCallback<Device> SelectDevice { get; set; }
+    [Parameter] public string ErrorMessage { get; set; }
+}

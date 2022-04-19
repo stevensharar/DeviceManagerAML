@@ -1,0 +1,83 @@
+﻿@page "/device/{deviceIndex:int}"
+@inject HttpClient http
+@inject NavigationManager navigation
+
+@if (device == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="card edit-detail">
+        <header class="card-header">
+            <p class="card-header-title">
+                @device.DeviceId
+            </p>
+        </header>
+        <div class="card-content">
+            <div class="content">
+                @if (device.Index != 0)
+                {
+                    <label class="label" for="id">id</label>
+                    <input name="id"
+                           class="input"
+                           value="@device.DeviceId"
+                           readonly="readonly" />
+                }
+                <InputDetail Name="name"
+                             Placeholder="m77300"
+                             @bind-Value="device.DeviceId" />
+                <InputDetail Name="model"
+                             Placeholder="M7800"
+                             @bind-Value="device.Model" />
+            </div>
+        </div>
+        <footer class="card-footer ">
+            <ButtonFooter Class="cancel-button"
+                          IconClasses="fas fa-undo"
+                          OnClick="@CancelDevice"
+                          Label="Cancel" />
+            <ButtonFooter Class="save-button"
+                          IconClasses="fas fa-save"
+                          OnClick="@Save"
+                          Label="Save" />
+        </footer>
+    </div>
+}
+
+@code {
+    private Device device;
+
+    [Parameter] public int DeviceIndex { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (DeviceIndex == 0)
+        {
+            device = new Device();
+        }
+        else
+        {
+            var devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+            device = devices.First(p => p.Index == DeviceIndex);
+        }
+    }
+
+    private void CancelDevice()
+    {
+        navigation.NavigateTo("/");
+    }
+
+    private async Task Save()
+    {
+        if (device.Index == 0)
+        {
+            await http.PostAsJsonAsync("api/devices", device);
+        }
+        else
+        {
+            await http.PutAsJsonAsync("api/devices", device);
+        }
+        navigation.NavigateTo("/");
+    }
+}

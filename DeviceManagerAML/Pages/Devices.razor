@@ -1,0 +1,87 @@
+﻿@page "/devices"
+@inject HttpClient http
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+     <Authorized>
+         <div class="content-container">
+    <ListHeader Title="Device List"
+                HandleAdd="@AddNewDevice"
+                HandleRefresh="@HandleRefresh"
+                RoutePath="/devices" />
+    <div class="columns is-multiline is-variable">
+        <div class="column is-8">
+            <DeviceList ErrorMessage="@errorMessage"
+                         Devices="@devices"
+                         SelectDevice="@SelectDevice"
+                         DeleteDevice="@DeleteDevice" />
+        </div>
+    </div>
+
+    <ModalYesNo Message="@modalMessage"
+                OnNo="@CloseModal"
+                OnYes="@DeleteFromModal"
+                Show="@showModal"/>
+</div>
+    
+     </Authorized>
+     <NotAuthorized>
+         <p>Not Authorized</p>
+     </NotAuthorized>
+ </AuthorizeView>
+
+@code {
+    private string errorMessage = "";
+    private IEnumerable<Device> devices;
+    private Device deviceToDelete;
+    private bool showModal;
+    private string modalMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+        }
+    }
+
+    private void AddNewDevice()
+    {
+        navigation.NavigateTo("/device/0");
+    }
+
+    private async Task HandleRefresh()
+    {
+        devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+    }
+
+    private void SelectDevice(Device device)
+    {
+        navigation.NavigateTo($"/device/{device.Index}");
+    }
+
+    private void DeleteDevice(Device device)
+    {
+        deviceToDelete = device;
+        showModal = true;
+        modalMessage = $"Would you like to delete {device.DeviceId}";
+    }
+
+    private void CloseModal()
+    {
+        deviceToDelete = null;
+        showModal = false;
+    }
+
+    private async Task DeleteFromModal()
+    {
+        await http.DeleteAsync($"api/devices/{deviceToDelete.Index}");
+        await HandleRefresh();
+        deviceToDelete = null;
+        showModal = false;
+    }
+}

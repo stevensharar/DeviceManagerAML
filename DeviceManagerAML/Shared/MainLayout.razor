@@ -1,0 +1,14 @@
+﻿@inherits LayoutComponentBase
+<div>
+    <HeaderBar />
+    <div class="top-row px-4 auth">
+             <LoginControl />
+             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+         </div>
+    <div class="section columns">
+        <NavMenu />
+        <main class="column">
+            @Body
+        </main>
+    </div>
+</div>
