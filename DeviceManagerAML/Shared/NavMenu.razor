@@ -8,6 +8,17 @@
             <NavLink href="/devices" ActiveClass="active-link">
                 Devices
             </NavLink>
+            <NavLink href="/profile" ActiveClass="active-link">
+                Profile
+            </NavLink>
+            <AuthorizeView> 
+                @if (@context.User.IsInRole("admin"))
+                {
+                    <NavLink href="/admin" ActiveClass="active-link">
+                        Admin
+                    </NavLink>
+                }
+            </AuthorizeView>
             <NavLink href="/about" ActiveClass="active-link">
                 About
             </NavLink>

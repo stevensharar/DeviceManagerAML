@@ -1,0 +1,24 @@
+﻿@page "/admin"
+@inject HttpClient http
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using DeviceManagerAML.Shared
+
+<AuthorizeView>
+     <Authorized>
+
+     </Authorized>
+     <NotAuthorized>
+         <p>Log in to see admin tools.</p>
+     </NotAuthorized>
+ </AuthorizeView>
+
+@code {
+    
+    protected override async Task OnInitializedAsync()
+    {
+       
+    }
+
+    
+}

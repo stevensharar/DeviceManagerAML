@@ -1,0 +1,25 @@
+﻿@page "/profile"
+@inject HttpClient http
+@inject NavigationManager navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@using DeviceManagerAML.Shared
+
+<AuthorizeView>
+     <Authorized>
+         
+     </Authorized>
+     <NotAuthorized>
+         <p>Log in to see your profile.</p>
+     </NotAuthorized>
+ </AuthorizeView>
+
+@code {
+    
+    protected override async Task OnInitializedAsync()
+    {
+       
+    }
+
+    
+}
+
