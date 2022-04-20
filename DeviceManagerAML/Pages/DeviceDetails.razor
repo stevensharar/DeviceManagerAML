@@ -46,7 +46,7 @@ else
 }
 
 @code {
-    private Device device;
+    private Device ?device;
 
     [Parameter] public int DeviceIndex { get; set; }
 
@@ -59,7 +59,14 @@ else
         else
         {
             var devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
-            device = devices.First(p => p.Index == DeviceIndex);
+            if (devices != null)
+            {
+                device = devices.First(p => p.Index == DeviceIndex);
+            } 
+            else
+            {
+                device = new Device();
+            }
         }
     }
 
@@ -70,13 +77,16 @@ else
 
     private async Task Save()
     {
-        if (device.Index == 0)
+        if (device != null)
         {
-            await http.PostAsJsonAsync("api/devices", device);
-        }
-        else
-        {
-            await http.PutAsJsonAsync("api/devices", device);
+            if (device.Index == 0)
+            {
+                await http.PostAsJsonAsync("api/devices", device);
+            }
+            else
+            {
+                await http.PutAsJsonAsync("api/devices", device);
+            }
         }
         navigation.NavigateTo("/");
     }

@@ -12,15 +12,22 @@
 </div>
 
 @code {
-    [Parameter] public string Name { get; set; }
-    [Parameter] public string Value { get; set; }
+    [Parameter] public string ?Name { get; set; }
+    [Parameter] public string ?Value { get; set; }
     [Parameter] public bool ReadOnly { get; set; }
-    [Parameter] public string Placeholder { get; set; }
+    [Parameter] public string ?Placeholder { get; set; }
     [Parameter] public EventCallback<string> ValueChanged { get; set; }
 
     private Task OnInputChange(ChangeEventArgs e)
     {
-        Value = e.Value.ToString();
+        if (e.Value != null)
+        {
+            Value = e.Value.ToString();
+        }
+        else
+        {
+            Value = null;
+        }
 
         return ValueChanged.InvokeAsync(Value);
     }

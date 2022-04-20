@@ -2,39 +2,40 @@
 @inject HttpClient http
 @inject NavigationManager navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@using DeviceManagerAML.Shared
 
 <AuthorizeView>
      <Authorized>
          <div class="content-container">
-    <ListHeader Title="Device List"
+            <ListHeader Title="Device List"
                 HandleAdd="@AddNewDevice"
                 HandleRefresh="@HandleRefresh"
                 RoutePath="/devices" />
-    <div class="columns is-multiline is-variable">
-        <div class="column is-8">
-            <DeviceList ErrorMessage="@errorMessage"
+            <div class="columns is-multiline is-variable">
+                <div class="column is-8">
+                    <DeviceList ErrorMessage="@errorMessage"
                          Devices="@devices"
                          SelectDevice="@SelectDevice"
                          DeleteDevice="@DeleteDevice" />
-        </div>
-    </div>
+                </div>
+            </div>
 
-    <ModalYesNo Message="@modalMessage"
+            <ModalYesNo Message="@modalMessage"
                 OnNo="@CloseModal"
                 OnYes="@DeleteFromModal"
                 Show="@showModal"/>
-</div>
+        </div>
     
      </Authorized>
      <NotAuthorized>
-         <p>Not Authorized</p>
+         <p>Log in to see your devices.</p>
      </NotAuthorized>
  </AuthorizeView>
 
 @code {
     private string errorMessage = "";
-    private IEnumerable<Device> devices;
-    private Device deviceToDelete;
+    private IEnumerable<Device> ?devices;
+    private Device ?deviceToDelete;
     private bool showModal;
     private string modalMessage = "";
 
@@ -43,21 +44,21 @@
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity.IsAuthenticated)
+        if (user != null)
         {
-            devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+            if (user.Identity != null)
+            {
+                if (user.Identity.IsAuthenticated)
+                {
+                    devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+                }
+            }       
         }
     }
 
-    private void AddNewDevice()
-    {
-        navigation.NavigateTo("/device/0");
-    }
+    private void AddNewDevice() => navigation.NavigateTo("/device/0");
 
-    private async Task HandleRefresh()
-    {
-        devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
-    }
+    private async Task HandleRefresh() => devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
 
     private void SelectDevice(Device device)
     {
@@ -79,7 +80,10 @@
 
     private async Task DeleteFromModal()
     {
-        await http.DeleteAsync($"api/devices/{deviceToDelete.Index}");
+        if (deviceToDelete != null)
+        {
+            await http.DeleteAsync($"api/devices/{deviceToDelete.Index}");
+        }      
         await HandleRefresh();
         deviceToDelete = null;
         showModal = false;

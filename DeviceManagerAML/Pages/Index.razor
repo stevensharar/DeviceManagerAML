@@ -4,12 +4,21 @@
 
 <AuthorizeView>
      <Authorized>
-         <h1>Hello, @context.User.Identity.Name !</h1>
+        @if (@context.User.Identity != null)
+        {
+            <h1>Hello, @context.User.Identity.Name !</h1>
   
-         <p>Welcome to your new app.</p>
-    
+            <p>Welcome to AML Device Manager.</p>
+        }
+        else
+        {
+            <h1>Hello!</h1>
+  
+            <p>Welcome to AML Device Manager.</p>
+        }
+  
      </Authorized>
      <NotAuthorized>
-         <p>Not Authorized</p>
+         <p>Log in to see your home screen.</p>
      </NotAuthorized>
  </AuthorizeView>

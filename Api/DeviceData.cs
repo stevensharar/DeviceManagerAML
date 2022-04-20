@@ -17,7 +17,7 @@ public interface IDeviceData
 
 public class DeviceData : IDeviceData
 {
-    private readonly CosmosClient cosmosClient = new CosmosClient("https://aml-device-manager.documents.azure.com:443/", "MafSZSwJUjD1xkS2jv6JMEvgcFVIQgoFKGhmqNBeCSNzXLVOk2uH98MouvjvTOYtXJ4kg5QOBIsOMDDYfse4Qw==");
+    private readonly CosmosClient cosmosClient = new CosmosClient("https://amldevicemanager.documents.azure.com:443/", "0c40emriFXpnCSWL8gxUdfCkdgbhrz2f7pbfPE46vTPsWrJVABNszC3LTJnC3AU1gPx9s5vHDc9kqcki5lFXPg==");
 
     private int GetRandomInt()
     {
@@ -27,7 +27,7 @@ public class DeviceData : IDeviceData
 
     public async Task<Device> AddDevice(Device device)
     {
-        Container deviceContainer = cosmosClient.GetContainer("DeviceManagerDatabase", "Devices");
+        Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
         device.Index = GetRandomInt();
         ItemResponse<Device> response = await deviceContainer.CreateItemAsync(device);
         return device;
@@ -35,7 +35,7 @@ public class DeviceData : IDeviceData
 
     public async Task<Device> UpdateDevice(Device device)
     {
-        Container deviceContainer = cosmosClient.GetContainer("DeviceManagerDatabase", "Devices");
+        Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
         ItemResponse<Device> response = await deviceContainer.DeleteItemAsync<Device>(device.DeviceId, new PartitionKey(device.DeviceId));
         ItemResponse<Device> itemResponse = await deviceContainer.CreateItemAsync<Device>(device, new PartitionKey(device.DeviceId));
         return device;
@@ -45,7 +45,7 @@ public class DeviceData : IDeviceData
     {
         bool exists = false;
         string valId = null;
-        Container deviceContainer = cosmosClient.GetContainer("DeviceManagerDatabase", "Devices");
+        Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
         FeedIterator<Device> iter = deviceContainer.GetItemQueryIterator<Device>();
         while (iter.HasMoreResults)
         {
@@ -70,7 +70,7 @@ public class DeviceData : IDeviceData
     public async Task<IEnumerable<Device>> GetDevices()
     {
         List<Device> deviceList = new List<Device>();
-        Container deviceContainer = cosmosClient.GetContainer("DeviceManagerDatabase", "Devices");
+        Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
         FeedIterator<Device> iter = deviceContainer.GetItemQueryIterator<Device>();
         while (iter.HasMoreResults)
         {

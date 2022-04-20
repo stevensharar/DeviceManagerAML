@@ -7,8 +7,8 @@
 </button>
 
 @code {
-    [Parameter] public string Class { get; set; }
-    [Parameter] public string IconClasses { get; set; }
-    [Parameter] public string Label { get; set; }
+    [Parameter] public string ?Class { get; set; }
+    [Parameter] public string ?IconClasses { get; set; }
+    [Parameter] public string ?Label { get; set; }
     [Parameter] public EventCallback OnClick { get; set; }
 }
