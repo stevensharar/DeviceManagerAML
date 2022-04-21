@@ -34,8 +34,8 @@
 
 @code {
     private string errorMessage = "";
-    private IEnumerable<Device> ?devices;
-    private Device ?deviceToDelete;
+    private IEnumerable<Device> devices;
+    private Device deviceToDelete;
     private bool showModal;
     private string modalMessage = "";
 
@@ -50,7 +50,19 @@
             {
                 if (user.Identity.IsAuthenticated)
                 {
-                    devices = await http.GetFromJsonAsync<IEnumerable<Device>>("api/devices");
+                    HttpResponseMessage res = await http.GetAsync("api/devices");
+                        if (res.IsSuccessStatusCode)
+                        {
+                            // Only deserialize when we did not have an API failure
+                            devices = await res.Content.ReadFromJsonAsync<IEnumerable<Device>>();
+                        }
+                        else
+                        {
+                            // Otherwise treat the response as an error message
+                            string errMsg = await res.Content.ReadAsStringAsync();
+                            Console.WriteLine(errMsg);
+                            throw new Exception(errMsg);
+                        }
                 }
             }       
         }

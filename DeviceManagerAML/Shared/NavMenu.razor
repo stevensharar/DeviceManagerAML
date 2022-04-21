@@ -12,12 +12,9 @@
                 Profile
             </NavLink>
             <AuthorizeView> 
-                @if (@context.User.IsInRole("admin"))
-                {
                     <NavLink href="/admin" ActiveClass="active-link">
                         Admin
                     </NavLink>
-                }
             </AuthorizeView>
             <NavLink href="/about" ActiveClass="active-link">
                 About

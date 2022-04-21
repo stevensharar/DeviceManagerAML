@@ -69,17 +69,26 @@ public class DeviceData : IDeviceData
 
     public async Task<IEnumerable<Device>> GetDevices()
     {
-        List<Device> deviceList = new List<Device>();
-        Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
-        FeedIterator<Device> iter = deviceContainer.GetItemQueryIterator<Device>();
-        while (iter.HasMoreResults)
-        {
-            FeedResponse<Device> response = await iter.ReadNextAsync();
-            foreach (var prod in response)
+       
+            List<Device> deviceList = new List<Device>();
+        try { 
+            Container deviceContainer = cosmosClient.GetContainer("American Microsystems Ltd.", "Devices");
+            FeedIterator<Device> iter = deviceContainer.GetItemQueryIterator<Device>();
+
+            while (iter.HasMoreResults)
             {
-                deviceList.Add(prod);
+                FeedResponse<Device> response = await iter.ReadNextAsync();
+                foreach (var prod in response)
+                {
+                    deviceList.Add(prod);
+                }
             }
+            return deviceList.AsEnumerable();
         }
-        return deviceList.AsEnumerable();
+        catch (Exception ex)
+        {
+            Console.WriteLine("api ex: " + ex.Message);
+            return deviceList.AsEnumerable();
+        }
     }
 }
