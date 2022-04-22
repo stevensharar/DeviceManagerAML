@@ -3,7 +3,6 @@
     "rewrite": "index.html",
     "exclude": [ "/_framework/*", "/css/*" ]
   },
-
   "routes": [
     {
       "route": "/authentication/login-callback*",
@@ -17,3 +16,5 @@
     }
   ]
 }
+
+  
